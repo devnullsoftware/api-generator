@@ -2,7 +2,7 @@
 <html lang="en" ng-app="myApp">
     <head>
         <meta charset="UTF-8">
-        <title>Registry</title>
+        <title>Api Docs</title>
         <link rel="stylesheet" type="text/css" href="/packages/devnullsoftware/api-generator/css/main.css">
 
         @section('angular-scripts')

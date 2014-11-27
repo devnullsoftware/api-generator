@@ -7,7 +7,6 @@ use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
 
 use DevnullSoftware\ApiGenerator\Api;
-use Registry\User;
 use ReflectionClass;
 use Illuminate\Routing\Controller as BaseController;
 
