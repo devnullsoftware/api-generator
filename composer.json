@@ -21,5 +21,5 @@
             "DevnullSoftware\\ApiGenerator\\": "src/"
         }
     },
-    "minimum-stability": "stable"
+    "minimum-stability": "dev"
 }
