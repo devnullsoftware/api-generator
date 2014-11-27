@@ -1,0 +1,25 @@
+{
+    "name": "devnullsoftware/api-generator",
+    "description": "Easily and quickly generate APIs. Documents and api user interface is automatically generated at /apis route.",
+    "authors": [
+        {
+            "name": "Matt Meisberger",
+            "email": "matt.meisberger@gmail.com"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "illuminate/support": "5.0.*"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations",
+            "src/controllers",
+            "src"
+        ],
+        "psr-0": {
+            "DevnullSoftware\\ApiGenerator\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
