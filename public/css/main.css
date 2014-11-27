@@ -41,7 +41,7 @@ html { font-family: "Droid Sans",sans-serif }
     .api .body table td:first-child { text-align: right; padding-right: 8px; }
     .api .body .error { color: #ff4e6c; font-size: .7em; }
     .api .body td.raw-data { position: relative; padding-left: 20px;}
-    .api .body textarea { font-weight: bold; cursor: pointer; padding-left: 18px; width: 500px; border: none; border-left: 2px dashed; background: url('/img/copy.png') no-repeat 10px bottom; }
+    .api .body textarea { font-weight: bold; cursor: pointer; padding-left: 18px; width: 500px; border: none; border-left: 2px dashed; background: url('/packages/devnullsoftware/api-generator/img/copy.png') no-repeat 10px bottom; }
     
     .api .body div.submit input { margin-top: 10px; border: 1px solid #000; text-align: center; width: 200px; color: #fff; margin-left: 100px;}
     

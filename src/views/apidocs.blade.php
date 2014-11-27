@@ -58,8 +58,8 @@
 
 @section('angular-scripts')
     @parent
-    <script src="/devnullsoftware/api-generator/js/ngClip.js"></script>
-    <script src="/devnullsoftware/api-generator/js/status-codes.js"></script>
-    <script src="/devnullsoftware/api-generator/js/apiDocController.js"></script>
-    <script src="/devnullsoftware/api-generator/js/zeroclipboard/ZeroClipboard.min.js"></script>
+    <script src="/packages/devnullsoftware/api-generator/js/ngClip.js"></script>
+    <script src="/packages/devnullsoftware/api-generator/js/status-codes.js"></script>
+    <script src="/packages/devnullsoftware/api-generator/js/apiDocController.js"></script>
+    <script src="/packages/devnullsoftware/api-generator/js/zeroclipboard/ZeroClipboard.min.js"></script>
 @stop

@@ -9,8 +9,10 @@ use Illuminate\Support\Facades\View;
 use DevnullSoftware\ApiGenerator\Api;
 use Registry\User;
 use ReflectionClass;
+use Illuminate\Routing\Controller as BaseController;
 
-class DocsController extends Controller {
+
+class DocsController extends BaseController {
 
     public static  function methodOrder($method) {
         switch (strtolower($method))
