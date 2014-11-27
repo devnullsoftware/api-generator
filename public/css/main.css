@@ -1,0 +1,59 @@
+html { font-family: "Droid Sans",sans-serif }
+.content { padding: 20px; }
+
+/* API page */
+    /*.apis { width: 900px; margin-right: auto; }*/
+    .api-groups, .apis, .restrictions { list-style-type: none }
+    .api { margin-bottom: 20px; }
+    .api .body { border: 1px solid white;  padding: 10px; display: none; }
+    .api .method { border-radius: 2px; color: #fff; font-size: 0.7em; text-align: center; text-transform: uppercase; margin-right: 10px; display: inline-block; width: 46px; }
+    .api .header .path { width: 500px; display: inline-block; }
+    .api .header .description { padding-left: 20px; border-left: 1px dotted gray; }
+    .api .header .handler { float: right; }
+    .api .header { line-height: 28px; padding-right: 20px; cursor: pointer; }
+    .noselect { -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none; }
+
+    .api.post { background-color: #E7F6EC; border-color: #C3E8D1; }
+    .api.post .method, .api.post input[type="submit"] { background-color: #10A54A }
+    .api.post .body { background-color: #EBF7F0; border-color: #C3E8D1; }
+    .api.post .match-color { color: #10a54a; border-color: #10a54a; }
+    
+    .api.get { background-color: #E7F0F7; border-color: #C3D9EC; }
+    .api.get .method, .api.get input[type="submit"] { background-color: #0F6AB4 }
+    .api.get .body { background-color: #EBF3F9; border-color: #C3D9EC; }
+    .api.get .match-color { color: #0f6ab4; border-color: #0f6ab4; }
+    
+    .api.put { background-color: #F9F2E9; border-color: #F0E0CA; }
+    .api.put .method, .api.put input[type="submit"] { background-color: #C5862B }
+    .api.put .body { background-color: #FAF5EE; border-color: #F0E0CA; }
+    .api.put .match-color { color: #c5862b; border-color: #c5862b; }
+    
+    .api.delete { background-color: #F5E8E8; border-color: #E8C6C7; }
+    .api.delete .method, .api.delete input[type="submit"] { background-color: #A41E22 }
+    .api.delete .body { background-color: #F7EDED; border-color: #E8C6C7; }
+    .api.delete .match-color { color: #a41e22; border-color: #a41e22; }
+    
+    .api .body table { margin-left: 20px; border-collapse: collapse }
+    .api .body table th { color: #a0a0a0; font-size: .7em; border-bottom: 1px solid #a0a0a0;}
+    .api .body .row-1 td { padding-top: 8px; }
+    .api .body td { padding-bottom: 9px; }
+    .api .body table td { vertical-align: top; }
+    .api .body table td:first-child { text-align: right; padding-right: 8px; }
+    .api .body .error { color: #ff4e6c; font-size: .7em; }
+    .api .body td.raw-data { position: relative; padding-left: 20px;}
+    .api .body textarea { font-weight: bold; cursor: pointer; padding-left: 18px; width: 500px; border: none; border-left: 2px dashed; background: url('/img/copy.png') no-repeat 10px bottom; }
+    
+    .api .body div.submit input { margin-top: 10px; border: 1px solid #000; text-align: center; width: 200px; color: #fff; margin-left: 100px;}
+    
+    .api .results { padding: 30px; padding-top: 10px; }
+    
+    .api .results pre { padding: 10px; font-size: .9em; max-height: 400px; overflow-y: auto; background-color: #fcf6db; border: 1px solid #e5e0c6; }
+    .api .results pre.code { margin-top: 0; padding-top: 0; }
+    
+    .api .results pre.code .short { font-size: 20px; font-weight: bold; }
+    .api .results pre .response-code-2 { color: #00E500; }
+    .api .results pre .response-code-4 { color: #31baff; }
+    .api .results pre .response-code-5 { color: #f00; }
+    
+   .api-group { border-bottom: 1px dotted #aaa; cursor: pointer; }
+   .api-group > span { display: inline-block; width: 100% ; line-height: 45px;  font-size: 20px;}

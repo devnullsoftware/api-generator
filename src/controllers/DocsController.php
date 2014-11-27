@@ -10,7 +10,7 @@ use DevnullSoftware\ApiGenerator\Api;
 use Registry\User;
 use ReflectionClass;
 
-class DocsController {
+class DocsController extends Controller {
 
     public static  function methodOrder($method) {
         switch (strtolower($method))

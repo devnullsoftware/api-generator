@@ -3,7 +3,7 @@
     <head>
         <meta charset="UTF-8">
         <title>Registry</title>
-        <link rel="stylesheet" type="text/css" href="/css/main.css">
+        <link rel="stylesheet" type="text/css" href="/devnullsoftware/api-generator/css/main.css">
 
         @section('angular-scripts')
             @if(Config::get('app.debug'))
@@ -11,7 +11,7 @@
             @else
                 <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
             @endif
-            <script src="/js/main.js"></script>
+            <script src="/devnullsoftware/api-generator/js/main.js"></script>
         @show
     </head>
     <body>
