@@ -52,6 +52,13 @@ class DocsController extends BaseController {
             }
         }
 
+        $newApis = Event::fire('api-controller.generated', [$apis]); // maybe someone else will want to add some
+
+        foreach ($newApis as $group)
+        {
+            $apis = array_merge($apis, $group);
+        }
+
         uasort($apis, function(Api $a, Api $b) {
             $order = strcasecmp($a->group, $b->group);
 

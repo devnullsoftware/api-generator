@@ -29,6 +29,8 @@ class Api {
 
     public function __construct(Route $route)
     {
+        if ( ! $route ) return;
+
         list($controller, $method) = explode('@', $route->getAction()['controller']);
 
         $this->handler = explode('\\', $route->getAction()['controller']);
