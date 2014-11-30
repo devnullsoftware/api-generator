@@ -1,8 +1,9 @@
-@extends('ApiGenerator::layouts.default')
+@extends(Config::get('api.layout-override', 'ApiGenerator::layouts.default'))
 
 @section('content')
-    <h2>Api Docs</h2>
-    <ul class="api-groups" ng-controller="apiDocController">
+    <div ng-app="myApp">
+        <h2>Api Docs</h2>
+        <ul class="api-groups" ng-controller="apiDocController">
         <li class="api-group" ng-repeat="apiGroup in apiGroups" ><span class="noselect" slide-toggle="#group-{{ apiGroup.hash }}" ng-bind="apiGroup.name" ng-s></span>
             <ul class="apis slideable" id="group-{{ apiGroup.hash }}" duration="200ms">
                 <li ng-repeat="api in apis | apiGroupFilter:apiGroup">
@@ -19,7 +20,7 @@
                             
                             <form ng-submit="apisubmit(api)" ng-model="form" >
                                 <table border="0" ng-show="api.properties.length">
-                                    <tr><th>Name<th>Value<th>Restrictions<th>&nbsp;<th>Raw</tr>
+                                    <tr><th>Name<th>Value<th>Restrictions<th>Raw</tr>
 
                                     <tr class="row-{{ $index + 1 }}" ng-repeat="input in api.properties">
                                         <td ng-bind="input.name">
@@ -54,12 +55,23 @@
             </ul>
         </li>
     </ul>
+    </div>
 @stop
 
-@section('angular-scripts')
-    @parent
+@section('header-scripts')
+    <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+
+    @if(Config::get('app.debug'))
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.26/angular.js"></script>
+    @else
+        <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0/angular.min.js"></script>
+    @endif
+
+    <script src="/packages/devnullsoftware/api-generator/js/main.js"></script>
+    <link rel="stylesheet" type="text/css" href="/packages/devnullsoftware/api-generator/css/main.css">
+    
     <script src="/packages/devnullsoftware/api-generator/js/ngClip.js"></script>
     <script src="/packages/devnullsoftware/api-generator/js/status-codes.js"></script>
-    <script src="/packages/devnullsoftware/api-generator/js/apiDocController.js"></script>
     <script src="/packages/devnullsoftware/api-generator/js/zeroclipboard/ZeroClipboard.min.js"></script>
+    <script src="/packages/devnullsoftware/api-generator/js/apiDocController.js"></script>
 @stop
