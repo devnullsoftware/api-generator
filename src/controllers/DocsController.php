@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\View;
@@ -34,14 +35,14 @@ class DocsController extends BaseController {
 
     /**
      */
-	public function apis()
-	{
+    public function apis()
+    {
         // This allows us to use braces for angularjs
         Blade::setContentTags('<%', '%>'); 		// for variables and all things Blade
         Blade::setEscapedContentTags('<%%', '%%>'); 	// for escaped data
 
         if ( ! Request::ajax()) return View::make('ApiGenerator::apidocs');
-        
+
         $apis = [];
         foreach (Route::getRoutes() as $route)
         {
@@ -70,5 +71,5 @@ class DocsController extends BaseController {
         });
 
         return array_values($apis);
-	}
+    }
 }

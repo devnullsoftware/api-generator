@@ -27,7 +27,7 @@ class Api {
     public $inputProps = [];
 //    public $urlIdMap = [];
 
-    public function __construct(Route $route)
+    public function __construct(Route $route = null)
     {
         if ( ! $route ) return;
 
