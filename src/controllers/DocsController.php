@@ -1,5 +1,6 @@
 <?php namespace DevnullSoftware\ApiGenerator;
 
+use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
