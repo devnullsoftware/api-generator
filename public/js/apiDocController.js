@@ -57,14 +57,22 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
 
         /**
          * Make the action have real variables.
-         * 
+         *
          * @param action
          * @param data
          * @returns {*}
          */
-        var fixaction = function (action, data) {
+        var fixaction = function (action, data, method) {
+            if ( ~method.indexOf('GET') ) {
+                action = action + '?';
+            }
+
             angular.forEach(data, function (value, key) {
                 action = action.replace(key, value);
+
+                if ( ~method.indexOf('GET') ) {
+                    action = action + key + '=' + value + '&';
+                }
             });
 
             return action;
@@ -84,7 +92,7 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
                 }
             });
 
-            methodwrapper(fixaction(action, data), api.httpMethod, data).success(function (data, status, headers, config) {
+            methodwrapper(fixaction(action, data, api.httpMethod), api.httpMethod, data).success(function (data, status, headers, config) {
                 api.results = {
                     url: action,
                     raw: JSON.stringify(data, null, 2),
@@ -138,7 +146,7 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
 
             angular.forEach($scope.apis, function(api) {
                 var groupObject = {name: api.group, hash: api.groupHash};
-    
+
                 if (seen.indexOf(api.group) == -1) {
                     seen.push(api.group);
                     $scope.apiGroups.push(groupObject);

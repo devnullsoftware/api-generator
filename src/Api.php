@@ -6,13 +6,13 @@ use ReflectionClass;
 use ReflectionMethod;
 
 // TODO: add artisan artisan make:api /path/to/api
-    // TODO: make resource controller without edit / create page
-    // TODO: DI ApiRequest into put and post
-    // TODO: Add route for api.validation to config/api.php
-    // TODO: Allow for make to take a --model param
-        // TODO: look for fillable fields to add to config/api.php
-    // TODO: Improve and wrap ParamMatch into lib
-    // TODO: request a group option
+// TODO: make resource controller without edit / create page
+// TODO: DI ApiRequest into put and post
+// TODO: Add route for api.validation to config/api.php
+// TODO: Allow for make to take a --model param
+// TODO: look for fillable fields to add to config/api.php
+// TODO: Improve and wrap ParamMatch into lib
+// TODO: request a group option
 // TODO: make this an extension
 
 class Api {
@@ -49,6 +49,9 @@ class Api {
 
         $requestclass = $this->getRequestClass($controller, $method, $this->path, $this->httpMethod);
         $this->inputProps = $requestclass ? $requestclass->rules() : [];
+
+        $this->response = $requestclass ? $requestclass->exampleResponse() : '';
+
 //        $this->urlIdMap = $this->getUrlIdMap($controller);
 
     }
@@ -103,7 +106,7 @@ class Api {
      * @param $method
      * @param $path
      * @param $httpMethod
-     * @return FormRequest|false
+     * @return ApiRequest|false
      */
     private function getRequestClass($controller, $method, $path, $httpMethod)
     {

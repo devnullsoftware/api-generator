@@ -16,21 +16,26 @@
                         </div>
 
                         <div class="body slideable" id="a{{api.hash}}" duration="200ms">
-                            <h3 class="match-color" ng-show=" api.properties.length ">Properties</h3>
-                            
                             <form ng-submit="apisubmit(api)" ng-model="form" >
                                 <table border="0" ng-show="api.properties.length">
-                                    <tr><th>Name<th>Value<th>Restrictions<th>Raw</tr>
+                                    <tr><th>Name<th class="value-col">Value<th>Restrictions<th>Raw
+                                    <th><span class="eg-response" ng-show="!api.results.raw">Example </span>Response <span class="response-code-{{(api.results.code.code).toString().charAt(0)}}" ng-bind=" api.results.code.code" ng-show="api.results.code.code">&nbsp;</span></th>
 
                                     <tr class="row-{{ $index + 1 }}" ng-repeat="input in api.properties">
                                         <td ng-bind="input.name">
-                                        <td>
+                                        <td class="inputs">
                                             <select ng-if="input.datamap" ng-model="input.selected"><option ng-repeat="option in input.datamap" value="{{ option.key }}" ng-bind="option.value"></option></select>
                                             <input ng-if=" ! (input.datamap)" type="text" name="{{ input.name }}" {{ input.isrequired }} ng-model="api.form[input.name]" />
+                                            <div  class="error" ng-show="input.error" ng-bind="input.error">&nbsp;</div>
                                         <td><ul class="restrictions"><li ng-repeat="restriction in input.restrictions" ng-bind="restriction">
-                                        <td  class="error" ng-bind="input.error" ng-show="input.error">&nbsp;</td>
                                         <td ng-if="$first" class="raw-data match-color" 
-                                        rowspan="{{ api.properties.length + 3 }}" ><textarea tabindex="-1" clip-copy="renderForm(api) " class="match-color" rows="{{ (api.properties.length) + 6 }}"  ng-bind="renderForm(api)"></textarea>
+                                        rowspan="{{ api.properties.length + 4 }}" ><textarea tabindex="-1" clip-copy="renderForm(api) " class="match-color" rows="{{ (api.properties.length) + 6 }}"  ng-bind="renderForm(api)"></textarea>
+
+                                        <td ng-show="!api.results.raw" ng-if="$first" class="response" rowspan="{{ api.properties.length + 4 }}" >
+                                        <textarea tabindex="-1" class="match-color" rows="{{ (api.properties.length) + 6 }}" ng-bind="api.response"></textarea></td>
+                                        
+                                        <td ng-show="api.results.raw" ng-if="$first" class="response" rowspan="{{ api.properties.length + 4 }}" >
+                                        <textarea tabindex="-1" class="match-color" rows="{{ (api.properties.length) + 6 }}" ng-bind="api.results.raw"></textarea></td>
                                     </tr>
 
                                 </table>
@@ -45,9 +50,6 @@
         
                                     <h5 class="match-color">Request URL</h5>
                                     <div class="results-data"><pre ng-bind="api.results.url"></pre></div>
-        
-                                    <h5 class="match-color">Response</h5>
-                                    <div class="results-data"><pre ng-bind="api.results.raw"></pre></div>
         
                                 </div>
                             </div>
@@ -68,7 +70,7 @@
     @endif
 
     <script src="/packages/devnullsoftware/api-generator/js/main.js"></script>
-    <link rel="stylesheet" type="text/css" href="/packages/devnullsoftware/api-generator/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/packages/devnullsoftware/api-generator/css/main.css?v=1">
     
     <script src="/packages/devnullsoftware/api-generator/js/ngClip.js"></script>
     <script src="/packages/devnullsoftware/api-generator/js/status-codes.js"></script>
