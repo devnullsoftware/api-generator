@@ -29,7 +29,7 @@ class Api {
 
     public function __construct(Route $route = null)
     {
-        if ( ! $route ) return;
+        if ( ! $route ) return; // route will be null when not called by documentor
 
         list($controller, $method) = explode('@', $route->getAction()['controller']);
 
@@ -48,34 +48,39 @@ class Api {
         $this->description = $this->getApiDescription($controller, $method);
 
         $requestclass = $this->getRequestClass($controller, $method, $this->path, $this->httpMethod);
-        $this->inputProps = $requestclass ? $requestclass->rules() : [];
+        $this->inputProps = $requestclass ? $requestclass->apiFields() : [];
 
         $this->response = $requestclass ? $requestclass->exampleResponse() : '';
 
-//        $this->urlIdMap = $this->getUrlIdMap($controller);
+        $this->urlIdMap = $this->getUrlIdMap($controller);
 
     }
 
-//    private function getUrlIdMap($controller) {
-//        if (!method_exists($controller, 'urlDataMap')) {
-//            // TODO: remove this in favor of implementing some api request class
-//            return array();
-//        }
-//
-//        return array_map(function ($datamap) {
-//            list($class, $keyField, $valueField) = $datamap;
-//            $updateOn = empty($datamap[3]) ? array() : $datamap[3];
-//
-//            return array_map(function ($obj) use ( $keyField, $valueField, $updateOn ) {
-//                return [
-//                    'key' => $obj[$keyField],
-//                    'value' => $obj[$valueField],
-//                    'updateon' => $updateOn
-//                ];
-//            }, $class::all()->toArray());
-//
-//        }, $controller::urlDataMap());
-//    }
+    private function getUrlIdMap($controller) {
+        if (!method_exists($controller, 'urlDataMap')) {
+            // TODO: remove this in favor of implementing some api request class
+            return array();
+        }
+
+        $items = array_map(function ($datamap) {
+            list($class, $keyField, $valueField) = $datamap;
+
+            $updateOn = empty($datamap[3]) ? array() : $datamap[3];
+
+            $item = [];
+            foreach ($class::all() as $obj) {
+                $item[] = [
+                    'key' => $obj->$keyField,
+                    'value' => $obj->$valueField,
+                    'updateon' => $updateOn
+                ];
+            }
+            return $item;
+
+        }, $controller::urlDataMap());
+
+        return array_combine(array_keys($controller::urlDataMap()), $items);
+    }
 
     private function getApiDescription($controller, $method)
     {

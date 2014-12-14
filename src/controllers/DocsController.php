@@ -1,6 +1,5 @@
 <?php namespace DevnullSoftware\ApiGenerator;
 
-use Illuminate\Support\Facades\Event;
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Event;
@@ -29,11 +28,6 @@ class DocsController extends BaseController {
         }
     }
 
-    public function routeModels()
-    {
-        return Config::get('api.models', []);
-    }
-
     /**
      */
     public function apis()
@@ -42,7 +36,12 @@ class DocsController extends BaseController {
         Blade::setContentTags('<%', '%>'); 		// for variables and all things Blade
         Blade::setEscapedContentTags('<%%', '%%>'); 	// for escaped data
 
-        if ( ! Request::ajax()) return View::make('ApiGenerator::apidocs');
+        if ( ! Request::ajax())
+        {
+            return Request::has('plain')
+                ? View::make('ApiGenerator::apidocs')
+                : View::make('ApiGenerator::plaindocs');
+        }
 
         $apis = [];
         foreach (Route::getRoutes() as $route)

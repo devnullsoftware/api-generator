@@ -1,6 +1,7 @@
 <?php namespace DevnullSoftware\ApiGenerator;
 
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 
@@ -20,7 +21,9 @@ class ApiGeneratorServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('devnullsoftware/api-generator', 'ApiGenerator');
+//		$this->package('devnullsoftware/api-generator', 'ApiGenerator');
+
+        View::addNamespace('ApiGenerator', __DIR__.'/../../views');
 
         Route::get('/apis', 'DevnullSoftware\ApiGenerator\DocsController@apis');
         Route::get('/apis/route-models', 'DevnullSoftware\ApiGenerator\DocsController@routeModels');

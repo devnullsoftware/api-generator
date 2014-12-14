@@ -4,7 +4,7 @@ use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Support\Facades\Config;
 use Exception;
 
-class ApiRequest extends FormRequest {
+abstract class ApiRequest extends FormRequest {
     protected $path;
     protected $method;
 
@@ -14,17 +14,15 @@ class ApiRequest extends FormRequest {
         $this->method = strtolower($method);
     }
 
-    public function rules()
+    /**
+     * An array of api fields formated as ['fieldname' => ['rule', 'description']]
+     * @return array
+     */
+    public abstract function apiFields();
+
+    final public function rules()
     {
-        $path = $this->path ?: $this->route->getPath();
-        $method = $this->method ?: strtolower($this->getMethod());
-
-        $path = preg_replace('!\{.+?\}!i', '{item}', $path);
-        $path = str_replace(['api/'], [''], $path);
-
-        return Config::get("api.validation.$method:$path", function () use ( $path, $method ) {
-            throw new Exception('Missing validation for '. "$method:$path");
-        });
+        return array_map('reset', $this->apiFields());
     }
 
     // TODO: this should probably be on some response object

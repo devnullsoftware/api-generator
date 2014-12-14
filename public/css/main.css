@@ -57,5 +57,14 @@ html { font-family: "Droid Sans",sans-serif }
 .response-code-4 { color: #31baff !important; }
 .response-code-5 { color: #f00 !important; }
 
+.api input.required { border-color: #faa; }
+
 .api-group { border-bottom: 1px dotted #aaa; cursor: pointer; }
 .api-group > span { display: inline-block; width: 100% ; line-height: 45px;  font-size: 20px;}
+
+
+.plain-docs table td {
+    vertical-align: top;
+}
+
+.plain-docs .api-response { border: 0px solid transparent; background-color: transparent;}

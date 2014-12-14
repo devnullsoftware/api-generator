@@ -24,8 +24,8 @@
                                     <tr class="row-{{ $index + 1 }}" ng-repeat="input in api.properties">
                                         <td ng-bind="input.name">
                                         <td class="inputs">
-                                            <select ng-if="input.datamap" ng-model="input.selected"><option ng-repeat="option in input.datamap" value="{{ option.key }}" ng-bind="option.value"></option></select>
-                                            <input ng-if=" ! (input.datamap)" type="text" name="{{ input.name }}" {{ input.isrequired }} ng-model="api.form[input.name]" />
+                                            <select title="{{ input.description }}" ng-if=" input.datamap.length " ng-model="input.selected" name="{{ input.name }}"><option ng-repeat="option in input.datamap" value="{{ option.key }}" ng-bind="option.value"></option></select>
+                                            <input title="{{ input.description }}" ng-if=" !input.datamap.length " type="{{ input.type }}" class="{{ input.class }}" name="{{ input.name }}" {{ input.isrequired }} ng-model="api.form[input.name]" />
                                             <div  class="error" ng-show="input.error" ng-bind="input.error">&nbsp;</div>
                                         <td><ul class="restrictions"><li ng-repeat="restriction in input.restrictions" ng-bind="restriction">
                                         <td ng-if="$first" class="raw-data match-color" 

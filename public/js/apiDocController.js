@@ -11,7 +11,7 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
         }
     })
 
-    .controller('apiDocController', function ($scope, $http) {
+    .controller('apiDocController', function ($scope, $http, $sce) {
         $scope.apis = [];
         $scope.apiGroups = [];
         $scope.apiRouteModels = [];
@@ -124,22 +124,21 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
             attachPropertiesToApis();
         });
 
-        $http.get('/apis/route-models').success(function(routeModels) {
-            angular.forEach(routeModels, function (path, model) {
-                $scope.apiRouteModels[model] = {
-                    name: model,
-                    path: path,
-                    data: []
-                };
-
-                if ( path.indexOf( '{' ) == -1 ) {
-                    $http.get(path).success(function (data) {
-                        $scope.apiRouteModels[model].data.push(data);
-                        console.log($scope.apiRouteModels);
-                    });
-                }
-            });
-        });
+        //$http.get('/apis/route-models').success(function(routeModels) {
+        //    angular.forEach(routeModels, function (path, model) {
+        //        $scope.apiRouteModels[model] = {
+        //            name: model,
+        //            path: path,
+        //            data: []
+        //        };
+        //
+        //        if ( path.indexOf( '{' ) == -1 ) {
+        //            $http.get(path).success(function (data) {
+        //                $scope.apiRouteModels[model].data.push(data);
+        //            });
+        //        }
+        //    });
+        //});
 
         var getGroupsFromApis = function () {
             var seen = [];
@@ -159,14 +158,57 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
             angular.forEach($scope.apis, function(api) {
                 api.properties = [];
 
-                angular.forEach(api.inputProps, function (restrictions, property) {
+                // make url parameters an input
+                api.path.replace(/\{(\w+?)\}/g, function (match, key) {
+                    var element = {
+                        'name': match,
+                        'restrictions': ['required'],
+                        'isrequired': ' required="required" ',
+                        'type': 'text',
+                        'class': ''
+                    };
+
+                    if (api.urlIdMap[match]) {
+                        element.datamap = api.urlIdMap[match];
+                    }
+
+                    api.properties.push(element);
+
+                    return match;
+                });
+
+                angular.forEach(api.inputProps, function (aboutProperty, property) {
                     api.visible = false;
 
-                    api.properties.push({
+                    var restrictions = aboutProperty[0];
+
+                    var element = {
                         'name': property,
                         'restrictions': restrictions.split('|'),
-                        'isrequired' : restrictions.indexOf('required') != -1 ? ' required="required" ' : ''
+                        'isrequired' : restrictions.indexOf('required') != -1 ? ' required="required" ' : '',
+                        'type' : 'text',
+                        'class': '',
+                        'description': aboutProperty[1] || ''
+                    };
+
+                    // link the restrictions
+                    angular.forEach(element.restrictions, function (restriction, key) {
+                        var normalized = restriction.split(':')[0];
+                        element.restrictions[key] = '<a target="_blank" href="http://laravel.com/docs/4.2/validation#rule-'+normalized+'">'+restriction+'</a>';
+                        element.restrictions[key] = $sce.trustAsHtml(element.restrictions[key]);
                     });
+
+                    // figure out the type for the input
+                    if ( ~restrictions.indexOf('integer') ) element.type = 'number';
+                    if ( ~restrictions.indexOf('min:') ) element.type = 'number';
+                    if ( ~restrictions.indexOf('max:') ) element.type = 'number';
+                    if ( ~restrictions.indexOf('date') ) element.type = 'date';
+                    if ( ~restrictions.indexOf('before:') ) element.type = 'date';
+                    if ( ~restrictions.indexOf('after:') ) element.type = 'date';
+
+                    if ( ~restrictions.indexOf('required') ) element.class += ' required';
+
+                    api.properties.push(element);
                 });
             });
         };
