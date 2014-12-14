@@ -38,9 +38,9 @@ class DocsController extends BaseController {
 
         if ( ! Request::ajax())
         {
-            return Request::has('plain')
-                ? View::make('ApiGenerator::apidocs')
-                : View::make('ApiGenerator::plaindocs');
+            return Request::get('plain', false)
+                ? View::make('ApiGenerator::plaindocs')
+                : View::make('ApiGenerator::apidocs');
         }
 
         $apis = [];
