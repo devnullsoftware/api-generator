@@ -29,7 +29,7 @@ class Api {
 
     public function __construct(Route $route = null)
     {
-        if ( ! $route ) return; // route will be null when not called by documentor
+        if ( ! $route || ! array_key_exists('controller', $route->getAction()) ) return; // route will be null when not called by documentor
 
         list($controller, $method) = explode('@', $route->getAction()['controller']);
 

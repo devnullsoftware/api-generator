@@ -16,9 +16,9 @@
                                 <tr><th>Property<th>Description<th>Restrictions
                                 <tr ng-repeat="input in api.properties">
                                     <td ng-bind="input.name">&nbsp;
-                                    <td ng-bind="intput.description">&nbsp;
+                                    <td ng-bind="input.description">&nbsp;
                                     <td>
-                                        <ul><li ng-repeat="restriction in input.restrictions" ng-bind-html="restriction">
+                                        <ul ng-show="input.restrictions.length"><li ng-repeat="restriction in input.restrictions" ng-bind-html="restriction">
                             </table>
                         </td>
                         <td><textarea class="api-response" ng-show="api.response.length" ng-bind="api.response" rows="5"></textarea>&nbsp;

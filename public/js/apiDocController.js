@@ -184,7 +184,6 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
 
                     var element = {
                         'name': property,
-                        'restrictions': restrictions.split('|'),
                         'isrequired' : restrictions.indexOf('required') != -1 ? ' required="required" ' : '',
                         'type' : 'text',
                         'class': '',
@@ -192,11 +191,15 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
                     };
 
                     // link the restrictions
-                    angular.forEach(element.restrictions, function (restriction, key) {
-                        var normalized = restriction.split(':')[0];
-                        element.restrictions[key] = '<a target="_blank" href="http://laravel.com/docs/4.2/validation#rule-'+normalized+'">'+restriction+'</a>';
-                        element.restrictions[key] = $sce.trustAsHtml(element.restrictions[key]);
-                    });
+                    if (restrictions.length) {
+                            element.restrictions = restrictions.split('|'),
+
+                            angular.forEach(element.restrictions, function (restriction, key) {
+                                var normalized = restriction.split(':')[0];
+                                element.restrictions[key] = '<a target="_blank" href="http://laravel.com/docs/4.2/validation#rule-'+normalized+'">'+restriction+'</a>';
+                                element.restrictions[key] = $sce.trustAsHtml(element.restrictions[key]);
+                            });
+                    }
 
                     // figure out the type for the input
                     if ( ~restrictions.indexOf('integer') ) element.type = 'number';

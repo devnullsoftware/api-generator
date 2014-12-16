@@ -47,7 +47,7 @@ class DocsController extends BaseController {
         foreach (Route::getRoutes() as $route)
         {
             // remove non apis and duplicate of PUT (ie PATCH)
-            if (stripos($route->uri(), 'api/') === 0 && !in_array('PATCH', $route->getMethods()))
+            if ( stripos($route->uri(), 'api/') === 0 && ! in_array('PATCH', $route->getMethods()) && array_key_exists('controller', $route->getAction()) )
             {
                 $apis[] = new Api($route);
             }
