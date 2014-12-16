@@ -27,7 +27,7 @@
                                             <select title="{{ input.description }}" ng-if=" input.datamap.length " ng-model="input.selected" name="{{ input.name }}"><option ng-repeat="option in input.datamap" value="{{ option.key }}" ng-bind="option.value"></option></select>
                                             <input title="{{ input.description }}" ng-if=" !input.datamap.length " type="{{ input.type }}" class="{{ input.class }}" name="{{ input.name }}" {{ input.isrequired }} ng-model="api.form[input.name]" />
                                             <div  class="error" ng-show="input.error" ng-bind="input.error">&nbsp;</div>
-                                        <td><ul class="restrictions"><li ng-repeat="restriction in input.restrictions" ng-bind="restriction">
+                                        <td><ul class="restrictions"><li ng-repeat="restriction in input.restrictions" ng-bind-html="restriction">
                                         <td ng-if="$first" class="raw-data match-color" 
                                         rowspan="{{ api.properties.length + 4 }}" ><textarea tabindex="-1" clip-copy="renderForm(api) " class="match-color" rows="{{ (api.properties.length) + 6 }}"  ng-bind="renderForm(api)"></textarea>
 
