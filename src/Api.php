@@ -50,7 +50,7 @@ class Api {
         $this->description = $this->getApiDescription($controller, $method);
 
         $requestclass = $this->getRequestClass($controller, $method, $this->path, $this->httpMethod);
-        $this->inputProps = $requestclass ? $requestclass->apiFields() : [];
+        $this->inputProps = $requestclass ? $requestclass->apiFields() : ['', ''];
 
         $this->response = $requestclass ? $requestclass->exampleResponse() : '';
 

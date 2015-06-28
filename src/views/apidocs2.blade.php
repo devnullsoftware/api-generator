@@ -58,7 +58,15 @@
                     </thead>
                     <tbody>
 
-                    @foreach ($api->inputProps as $name => list($validators, $description))
+                    @foreach ($api->inputProps as $name => $rules)
+                        <?php
+                                if (count($rules) > 1) {
+                                    list($validators, $description) = $rules;
+                                } else {
+                                    $validators = reset($rules);
+                                    $description = '';
+                                }
+                        ?>
                         <tr>
                             <td>{{$name}}</td>
                             <td><input ng-model="request.params.{{$name}}" type="text" name="{{$name}}"/></td>
@@ -76,7 +84,7 @@
             <br />
             <br />
             @if(!empty($api->responseCodes))
-                <h3 class="sub-header">Error Responses</h3>
+                <h3 class="sub-header">Possible Error Responses</h3>
 
                 <div class="table-resposneive">
                     <table class="table table-striped">
