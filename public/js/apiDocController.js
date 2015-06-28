@@ -45,7 +45,7 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
 
             var r = $scope.request;
 
-            var realPath = r.path;
+            var realPath = '/'+r.path;
 
             // move user params into route
             angular.forEach(r.routeParams, function(param) {
@@ -61,7 +61,7 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
             r.method = r.method.toLowerCase();
 
             if (r.method == 'get') {
-                realPath = '/'+r.path+'?'+jQuery.param(r.params);
+                realPath = r.path+'?'+jQuery.param(r.params);
             }
 
             $http[r.method](realPath, r.params)

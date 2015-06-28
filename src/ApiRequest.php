@@ -14,6 +14,10 @@ abstract class ApiRequest extends FormRequest {
         $this->method = strtolower($method);
     }
 
+    public function responseCodes() {
+        return [];
+    }
+
     /**
      * An array of api fields formated as ['fieldname' => ['rule', 'description']]
      * @return array

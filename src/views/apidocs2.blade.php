@@ -22,7 +22,7 @@
     </style>
     <div>
         <div ng-controller="requestController" class="col-sm-6 col-sm-offset-3 col-md-7 col-md-offset-1 main">
-            <h1 class="page-header"><strong>{{$api->group}}\</strong> {{$api->title}}</h1>
+            <h1 class="page-header"><strong>{{$api->group}}\</strong> {{$api->title}} <span class="handler">{{$api->handler}}</span></h1>
 
             <p>{{$api->description}}</p>
 
@@ -43,11 +43,9 @@
                 @endforeach
             </p>
 
-            <h3>Controller</h3>
-            <p>{{$api->handler}}</p>
-
-            <h3 class="sub-header">Parameters</h3>
-            <div class="table-responsive">
+            <h3 class="sub-header">Try A Request</h3>
+            <div class="the-request">
+                <div class="table-responsive">
                 <table class="table table-striped">
                     <thead>
                     <tr>
@@ -73,8 +71,11 @@
                 </table>
                 <button class="btn btn-primary" ng-click="doRequest()">Make The Request</button>
             </div>
+            </div>
 
-            @if(!empty($api->errorResponses))
+            <br />
+            <br />
+            @if(!empty($api->responseCodes))
                 <h3 class="sub-header">Error Responses</h3>
 
                 <div class="table-resposneive">
@@ -84,8 +85,9 @@
                         <th>Reason</th>
                         </thead>
                         <tbody>
-                        @foreach([] as $api->errorResponses)
-                            <td></td>
+                        @foreach($api->responseCodes as $code => $message)
+                            <td>{{ $code }}</td>
+                            <td>{{ $message }}</td>
                         @endforeach
                         </tbody>
                     </table>
@@ -94,11 +96,11 @@
         </div>
         <div ng-controller="responseController" class="col-md-4">
 
-        <h2>Request Response</h2>
+        <h3>Request Response</h3>
         <p class="response-status" ng-if="response.status">Response Status: <span ng-bind="response.status"></span></p>
         <pre id="response"><code ng-bind-html="response.body"></code></pre>
 
-        <h2>Example Response</h2>
+        <h3>Example Response</h3>
         <pre id="response"><code></code></pre>
         <script type="text/javascript">jQuery('#response code').html(library.json.prettyPrint(JSON.parse(<?=json_encode($api->response) ?>)))</script>
 

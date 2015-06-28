@@ -56,18 +56,36 @@ class Api {
 
         $this->urlIdMap = $this->getUrlIdMap($controller);
 
+        $this->responseCodes = $this->getResponseCodes($requestclass, !!$this->inputProps);
+    }
+
+    public function getResponseCodes($requestClass, $hasProperties) {
+        $codes = [];
+        if ($hasProperties) {
+            $codes = [422 => 'Missing fields or validation problems.'];
+        }
+
+        if ($requestClass) {
+            foreach ($requestClass->responseCodes() as $code => $message) {
+                $code = (int) $code;
+
+                $codes[$code] = $message;
+            }
+        }
+
+        return $codes;
     }
 
     private function getUrlIdMap($controller) {
         if (!method_exists($controller, 'urlDataMap')) {
             // TODO: remove this in favor of implementing some api request class
-            return array();
+            return [];
         }
 
         $items = array_map(function ($datamap) {
             list($class, $keyField, $valueField) = $datamap;
 
-            $updateOn = empty($datamap[3]) ? array() : $datamap[3];
+            $updateOn = empty($datamap[3]) ? [] : $datamap[3];
 
             $item = [];
             foreach ($class::all() as $obj) {
