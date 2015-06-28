@@ -27,7 +27,7 @@
             <p>{{$api->description}}</p>
 
             <h3>Path</h3>
-            <input type="hidden" ng-init="request.method='{{ $api->httpMethod }}'"></input>
+            <input type="hidden" ng-init="request.method='{{ $api->httpMethod }}'" />
             <input type="hidden" ng-init="request.path='{{ $api->path}}'" />
             <input type="hidden" ng-init="handler='{{ $api->handler }}'" />
 
@@ -43,46 +43,6 @@
                 @endforeach
             </p>
 
-            <h3 class="sub-header">Try A Request</h3>
-            <div class="the-request">
-                <div class="table-responsive">
-                <table class="table table-striped">
-                    <thead>
-                    <tr>
-                        <th>Field Name</th>
-                        <th></th>
-                        <th>Validators</th>
-                        <th>Description</th>
-                        <th></th>
-                    </tr>
-                    </thead>
-                    <tbody>
-
-                    @foreach ($api->inputProps as $name => $rules)
-                        <?php
-                                if (count($rules) > 1) {
-                                    list($validators, $description) = $rules;
-                                } else {
-                                    $validators = reset($rules);
-                                    $description = '';
-                                }
-                        ?>
-                        <tr>
-                            <td>{{$name}}</td>
-                            <td><input ng-model="request.params.{{$name}}" type="text" name="{{$name}}"/></td>
-                            <td>{{$validators}}</td>
-                            <td>{{$description}}</td>
-                            <td></td>
-                        </tr>
-                    @endforeach
-                    </tbody>
-                </table>
-                <button class="btn btn-primary" ng-click="doRequest()">Send Request</button>
-            </div>
-            </div>
-
-            <br />
-            <br />
             @if(!empty($api->responseCodes))
                 <h3 class="sub-header">Possible Error Responses</h3>
 
@@ -101,6 +61,48 @@
                     </table>
                 </div>
             @endif
+
+            <h3 class="sub-header">Try A Request</h3>
+            <div class="the-request">
+                <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                    <tr>
+                        <th>Field Name</th>
+                        <th></th>
+                        <th>Validators</th>
+                        <th>Description</th>
+                        <th></th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    @foreach ($api->inputProps as $name => $rules)
+                        <?php
+                                if (count($rules) > 1)
+                                {
+                                    list($validators, $description) = $rules;
+                                }
+                                else
+                                {
+                                    $validators = reset($rules);
+                                    $description = '';
+                                }
+                        ?>
+                        <tr>
+                            <td>{{$name}}</td>
+                            <td><input ng-model="request.params.{{$name}}" type="text" name="{{$name}}"/></td>
+                            <td>{{$validators}}</td>
+                            <td>{{$description}}</td>
+                            <td></td>
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+                <button class="btn btn-primary" ng-click="doRequest()">Send Request</button>
+            </div>
+            </div>
+
         </div>
         <div ng-controller="responseController" class="col-md-4">
 
