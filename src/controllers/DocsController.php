@@ -28,6 +28,23 @@ class DocsController extends BaseController {
         }
     }
 
+    public function apis2Welcome()
+    {
+        return View::make('ApiGenerator::layouts.v2');
+    }
+
+    public function apis2($action)
+    {
+        $api = false;
+        foreach (Route::getRoutes() as $route)
+        {
+            if (empty($route->getAction()['controller']) || !substr_count($route->getAction()['controller'], $action)) continue;
+
+            $api = new Api($route);
+        }
+
+        return view('ApiGenerator::apidocs2', ['api' => $api]);
+    }
     /**
      */
     public function apis()

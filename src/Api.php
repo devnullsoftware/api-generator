@@ -40,6 +40,8 @@ class Api {
         $this->group = $this->getApiGroup($controller, $method);
         $this->groupHash = md5($this->group);
 
+        $this->sort = $this->getApiSort($controller, $method);
+
         $this->path = $route->uri();
         $this->httpMethod = $route->getMethods()[0];
         $this->controllerMethod = $method;
@@ -82,11 +84,21 @@ class Api {
         return array_combine(array_keys($controller::urlDataMap()), $items);
     }
 
+    private function getApiSort($controller, $method)
+    {
+        $docblock = (new \ReflectionMethod($controller, $method))->getDocComment();
+
+        preg_match('!@ApiSort (.*)!i', $docblock, $match);
+        return trim(end($match)) ?: '';
+    }
+
     private function getApiDescription($controller, $method)
     {
         $docblock = (new \ReflectionMethod($controller, $method))->getDocComment();
 
+        // TODO: Make this smarter about more lines
         preg_match('!@ApiDescription (.*)!i', $docblock, $match);
+
         return trim(end($match)) ?: '';
     }
 
@@ -100,10 +112,21 @@ class Api {
 
     private function getApiGroup($controller, $method)
     {
+        $docblock = (new \ReflectionMethod($controller, $method))->getDocComment();
+
+        preg_match('!@ApiGroup (.*)!i', $docblock, $match);
+
+        $group = trim(end($match));
+
+        if (!empty($group)) return $group;
+
         $docblock = (new ReflectionClass($controller))->getDocComment();
 
         preg_match('!\@ApiGroup (.*)!i', $docblock, $match);
-        return trim(end($match)) ?: 'Uncategoriezed';
+
+        $group = trim(end($match));
+
+        return $group ?: 'Uncategorized';
     }
 
     /**

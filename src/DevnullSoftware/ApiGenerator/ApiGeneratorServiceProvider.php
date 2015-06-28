@@ -25,8 +25,16 @@ class ApiGeneratorServiceProvider extends ServiceProvider {
 
         View::addNamespace('ApiGenerator', __DIR__.'/../../views');
 
-        Route::get('/apis', 'DevnullSoftware\ApiGenerator\DocsController@apis');
-        Route::get('/apis/route-models', 'DevnullSoftware\ApiGenerator\DocsController@routeModels');
+		if (env('EXPOSE_APIS', true))
+		{
+			Route::get('/apis', 'DevnullSoftware\ApiGenerator\DocsController@apis');
+			Route::get('/apis/route-models', 'DevnullSoftware\ApiGenerator\DocsController@routeModels');
+
+			Route::get('/apis/v2', 'DevnullSoftware\ApiGenerator\DocsController@apis2Welcome');
+			Route::get('/apis/v2/{api}', 'DevnullSoftware\ApiGenerator\DocsController@apis2');
+
+			Route::get('apis/v2/data', 'DevnullSoftware\ApiGenerator\DocsController@apis2Data');
+		}
 	}
 
 	/**
@@ -46,7 +54,7 @@ class ApiGeneratorServiceProvider extends ServiceProvider {
 	 */
 	public function provides()
 	{
-		return array();
+		return [];
 	}
 
 }

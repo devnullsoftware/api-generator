@@ -1,6 +1,9 @@
-angular.module('myApp', ['ngClipboard', 'angularSlideables'])
+angular.module('myApp', ['ngStorage', 'ngSanitize'])
     .config(function ($httpProvider) {
         $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
+    })
+    .config(function($interpolateProvider){
+        $interpolateProvider.startSymbol('%%').endSymbol('%%');
     })
 
     .filter('apiGroupFilter', function () {
@@ -10,8 +13,73 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
             });
         }
     })
+    .controller('responseController', function($scope, $rootScope) {
+        $scope.response = {
+            status: false,
+            body: ''
+        }
 
-    .controller('apiDocController', function ($scope, $http, $sce) {
+        $rootScope.$on('request-returned', function (event, value) {
+            $scope.response.status = value.status;
+            $scope.response.body = library.json.prettyPrint(value.body);
+        });
+    })
+    .controller('requestController', function($scope, $http, $rootScope, $sessionStorage) {
+        // Model for storing necessary data to make the request
+        $scope.request = {
+            path: '',
+            method: '',
+            routeParams: {},
+            params: {}
+        }
+
+        $scope.$watch(function(scope) {return scope.handler; }, function() {
+            if (!$scope.handler || $scope.request.params.length) return;
+
+            $scope.request.routeParams = $sessionStorage[$scope.handler].routeParams;
+            $scope.request.params = $sessionStorage[$scope.handler].params;
+        });
+
+        $scope.doRequest = function() {
+            $sessionStorage[$scope.handler] = $scope.request;
+
+            var r = $scope.request;
+
+            var realPath = r.path;
+
+            // move user params into route
+            angular.forEach(r.routeParams, function(param) {
+                realPath.replace('{'+param+'}', param);
+            });
+
+            // Make all route params required
+            if (~realPath.indexOf('{')) {
+                alert('Must enter all route variables.');
+                return;
+            }
+
+            r.method = r.method.toLowerCase();
+
+            if (r.method == 'get') {
+                realPath = '/'+r.path+'?'+jQuery.param(r.params);
+            }
+
+            $http[r.method](realPath, r.params)
+            .success(function (res, code) {
+                $rootScope.$broadcast('request-returned', {
+                    body: res,
+                    status: code
+                });
+            })
+            .error(function(res, code) {
+                $rootScope.$broadcast('request-returned', {
+                    body: res,
+                    status: code
+                });
+            });
+        }
+    })
+    .controller('apiDocController', function ($scope, $http, $sce, $sessionStorage) {
         $scope.apis = [];
         $scope.apiGroups = [];
         $scope.apiRouteModels = [];
@@ -117,11 +185,22 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
             });
         };
 
+        // Local store for these before reloading to make it seem quick
+        $scope.apis = $sessionStorage.apis;
+        $scope.apiGroups = $sessionStorage.apiGroups;
+
         $http.get('/apis').success(function (apis) {
             $scope.apis = apis;
 
-            getGroupsFromApis();
+            angular.forEach(apis, function(api) {
+                api.sort = parseInt(api.sort);
+            });
+
+            $scope.apiGroups = getGroupsFromApis();
             attachPropertiesToApis();
+
+            $sessionStorage.apis = $scope.apis;
+            $sessionStorage.apiGroups = $scope.apiGroups;
         });
 
         //$http.get('/apis/route-models').success(function(routeModels) {
@@ -143,14 +222,17 @@ angular.module('myApp', ['ngClipboard', 'angularSlideables'])
         var getGroupsFromApis = function () {
             var seen = [];
 
+            var groups = [];
             angular.forEach($scope.apis, function(api) {
-                var groupObject = {name: api.group, hash: api.groupHash};
+                var groupObject = {name: api.group, hash: api.groupHash, groupSort:parseInt(api.groupSort)};
 
                 if (seen.indexOf(api.group) == -1) {
                     seen.push(api.group);
-                    $scope.apiGroups.push(groupObject);
+                    groups.push(groupObject);
                 }
             });
+
+            return groups;
         };
 
         var attachPropertiesToApis = function () {

@@ -75,5 +75,6 @@
     <script src="/packages/devnullsoftware/api-generator/js/ngClip.js"></script>
     <script src="/packages/devnullsoftware/api-generator/js/status-codes.js"></script>
     <script src="/packages/devnullsoftware/api-generator/js/zeroclipboard/ZeroClipboard.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/ngStorage/0.3.5/ngStorage.min.js"></script>
     <script src="/packages/devnullsoftware/api-generator/js/apiDocController.js"></script>
 @stop
