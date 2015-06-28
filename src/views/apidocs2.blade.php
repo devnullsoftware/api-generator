@@ -77,7 +77,7 @@
                     @endforeach
                     </tbody>
                 </table>
-                <button class="btn btn-primary" ng-click="doRequest()">Make The Request</button>
+                <button class="btn btn-primary" ng-click="doRequest()">Send Request</button>
             </div>
             </div>
 
