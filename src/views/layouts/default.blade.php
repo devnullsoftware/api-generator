@@ -52,7 +52,7 @@
             </form>
             <ul class="nav nav-sidebar api-nav" ng-repeat="apiGroup in apiGroups | orderBy:'name'">
                 <li role="presentation" ng-if="filtered.length"><span><h4 ng-bind="apiGroup.name"></h4></span></li>
-                <li ng-if="filtered.length" ng-repeat="api in filtered = (apis | apiGroupFilter:apiGroup | orderBy:'sort' | filter:search)"><a href="/apis/v2/%%api.handler%%"><small ng-bind="api.title || api.handler"></small></a></li>
+                <li ng-if="filtered.length" ng-repeat="api in filtered = (apis | apiGroupFilter:apiGroup | orderBy:'sort' | filter:search)"><a href="/apis/%%api.handler%%"><small ng-bind="api.title || api.handler"></small></a></li>
             </ul>
         </div>
 

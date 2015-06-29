@@ -30,7 +30,7 @@ class DocsController extends BaseController {
 
     public function apis2Welcome()
     {
-        return View::make('ApiGenerator::layouts.v2');
+        return View::make('ApiGenerator::layouts.default');
     }
 
     public function apis2($action)
@@ -43,7 +43,7 @@ class DocsController extends BaseController {
             $api = new Api($route);
         }
 
-        return view('ApiGenerator::apidocs2', ['api' => $api]);
+        return view('ApiGenerator::apidocs', ['api' => $api]);
     }
     /**
      */
@@ -57,13 +57,6 @@ class DocsController extends BaseController {
             {
                 $apis[] = new Api($route);
             }
-        }
-
-        $newApis = Event::fire('api-controller.generated', [$apis]); // maybe someone else will want to add some
-
-        foreach ($newApis as $group)
-        {
-            $apis = array_merge($apis, $group);
         }
 
         uasort($apis, function(Api $a, Api $b) {

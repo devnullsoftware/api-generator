@@ -189,7 +189,7 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
         $scope.apis = $sessionStorage.apis;
         $scope.apiGroups = $sessionStorage.apiGroups;
 
-        $http.get('/apis').success(function (apis) {
+        $http.get('/apis/data').success(function (apis) {
             $scope.apis = apis;
 
             angular.forEach(apis, function(api) {
@@ -202,22 +202,6 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
             $sessionStorage.apis = $scope.apis;
             $sessionStorage.apiGroups = $scope.apiGroups;
         });
-
-        //$http.get('/apis/route-models').success(function(routeModels) {
-        //    angular.forEach(routeModels, function (path, model) {
-        //        $scope.apiRouteModels[model] = {
-        //            name: model,
-        //            path: path,
-        //            data: []
-        //        };
-        //
-        //        if ( path.indexOf( '{' ) == -1 ) {
-        //            $http.get(path).success(function (data) {
-        //                $scope.apiRouteModels[model].data.push(data);
-        //            });
-        //        }
-        //    });
-        //});
 
         var getGroupsFromApis = function () {
             var seen = [];

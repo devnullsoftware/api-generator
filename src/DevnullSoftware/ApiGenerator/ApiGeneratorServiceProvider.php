@@ -21,16 +21,19 @@ class ApiGeneratorServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-//		$this->package('devnullsoftware/api-generator', 'ApiGenerator');
+		$this->publishes([
+			__DIR__.'/../../../public' => public_path('packages/devnullsoftware/api-generator'),
+		], 'public');
+
 
         View::addNamespace('ApiGenerator', __DIR__.'/../../views');
 
 		if (env('EXPOSE_APIS', true))
 		{
 			Route::get('/apis', 'DevnullSoftware\ApiGenerator\DocsController@apis2Welcome');
+			Route::get('apis/data', 'DevnullSoftware\ApiGenerator\DocsController@apis');
 			Route::get('/apis/{api}', 'DevnullSoftware\ApiGenerator\DocsController@apis2');
 
-			Route::get('apis/data', 'DevnullSoftware\ApiGenerator\DocsController@apis');
 		}
 	}
 
