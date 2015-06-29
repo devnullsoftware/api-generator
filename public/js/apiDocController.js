@@ -13,17 +13,6 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
             });
         }
     })
-    .controller('responseController', function($scope, $rootScope) {
-        $scope.response = {
-            status: false,
-            body: ''
-        }
-
-        $rootScope.$on('request-returned', function (event, value) {
-            $scope.response.status = value.status;
-            $scope.response.body = library.json.prettyPrint(value.body);
-        });
-    })
     .controller('requestController', function($scope, $http, $rootScope, $sessionStorage) {
         // Model for storing necessary data to make the request
         $scope.request = {
@@ -40,44 +29,72 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
             $scope.request.params = $sessionStorage[$scope.handler].params;
         });
 
+        $scope.response = {
+            status: false,
+            body: ''
+        }
+
         $scope.doRequest = function() {
+            // store the request so future page loads has data
             $sessionStorage[$scope.handler] = $scope.request;
 
-            var r = $scope.request;
+            var realPath = (function(r) {
+                var realPath = '/'+r.path;
 
-            var realPath = '/'+r.path;
-
-            // move user params into route
-            angular.forEach(r.routeParams, function(value, param) {
-                realPath = realPath.replace('{'+param+'}', value);
-            });
-
-            // Make all route params required
-            if (~realPath.indexOf('{')) {
-                alert('Must enter all route variables.');
-                return;
-            }
-
-            r.method = r.method.toLowerCase();
-
-            if (r.method == 'get') {
-                realPath = r.path+'?'+jQuery.param(r.params);
-            }
-
-            $http[r.method](realPath, r.params)
-            .success(function (res, code) {
-                $rootScope.$broadcast('request-returned', {
-                    body: res,
-                    status: code
+                // move user params into route
+                angular.forEach(r.routeParams, function(value, param) {
+                    realPath = realPath.replace('{'+param.trim()+'}', value);
                 });
-            })
-            .error(function(res, code) {
-                $rootScope.$broadcast('request-returned', {
-                    body: res,
-                    status: code
+
+                // Make all route params required
+                if (realPath.indexOf('{') > 0) {
+                    alert('Must enter all route variables.');
+                    return;
+                }
+
+                r.method = r.method.toLowerCase();
+
+                if (r.method == 'get') {
+                    realPath = realPath+'?'+jQuery.param(r.params);
+                }
+
+                return realPath;
+            })($scope.request);
+
+
+            $scope.makingRequest = true;
+            var dotdotdot = function(count) {
+                if (!$scope.makingRequest) {
+                    $scope.sendingStr = false;
+                    return;
+                }
+
+                if (count % 6) count = 0; // Reset dots after certain point
+
+                // Build the string with dots
+                $scope.sendingStr = 'Sending';
+                for(var x=1; x < count; x++) {
+                    $scope.sendingStr += '.';
+                }
+
+                dotdotdot(count + 1);
+            };
+
+            $http[$scope.request.method](realPath, $scope.request.params)
+                .success(function (res, code) {
+                    $scope.response.body = library.json.prettyPrint(res);
+                    $scope.response.status = code;
+
+                    $scope.makingRequest = false;
+                })
+                .error(function(res, code) {
+                    $scope.response.body = library.json.prettyPrint(res);
+                    $scope.response.status = code;
+
+                    $scope.makingRequest = false;
                 });
-            });
         }
+
     })
     .controller('apiDocController', function ($scope, $http, $sce, $sessionStorage) {
         $scope.apis = [];

@@ -71,7 +71,6 @@ class Api {
 
         if (empty($matches[1])) return $codes;
 
-
         return $codes += array_combine($matches[1], $matches[2]);
     }
 

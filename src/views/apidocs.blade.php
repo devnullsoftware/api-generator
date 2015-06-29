@@ -3,8 +3,8 @@
 @section('content')
     <script type="text/javascript" src="/packages/devnullsoftware/api-generator/js/json-pretty.js"></script>
 
-    <div>
-        <div ng-controller="requestController" class="col-sm-6 col-sm-offset-3 col-md-7 col-md-offset-1 main">
+    <div class="col-sm-6 col-sm-offset-3 col-md-11 col-md-offset-1 main" ng-controller="requestController">
+        <div>
             <h1 class="page-header"><strong>{{$api->group}}\</strong> {{$api->title}} <span class="handler">{{$api->handler}}</span></h1>
 
             <p>{{$api->description}}</p>
@@ -46,60 +46,64 @@
                     </table>
                 </div>
             @endif
-
-            <h3 class="sub-header">Try A Request</h3>
-            <div class="the-request">
-                <div class="table-responsive">
-                    <table class="table table-striped">
-                        <thead>
-                        <tr>
-                            <th>Field Name</th>
-                            <th></th>
-                            <th>Validators</th>
-                            <th>Description</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-
-                        @foreach ($api->inputProps as $name => $rules)
-                            <?php
-                            if (count($rules) > 1)
-                            {
-                                list($validators, $description) = $rules;
-                            }
-                            else
-                            {
-                                $validators = reset($rules);
-                                $description = '';
-                            }
-                            ?>
-                            <tr>
-                                <td>{{$name}}</td>
-                                <td><input ng-model="request.params.{{$name}}" type="text" name="{{$name}}"/></td>
-                                <td>{{$validators}}</td>
-                                <td>{{$description}}</td>
-                                <td></td>
-                            </tr>
-                        @endforeach
-                        </tbody>
-                    </table>
-                    <button class="btn btn-primary" ng-click="doRequest()">Send Request</button>
-                </div>
-            </div>
-
         </div>
-        <div ng-controller="responseController" class="col-md-4">
 
-            <h3>Request Response</h3>
-            <p class="response-status" ng-if="response.status">Response Status: <span ng-bind="response.status"></span></p>
-            <pre id="response"><code ng-bind-html="response.body"></code></pre>
+        <hr />
+        <div class="col-md-4">
 
-            <h3>Example Response</h3>
-            <pre id="response"><code></code></pre>
+
+            <pre id="response"><h3 class="flush-top">Request Response <small><span ng-bind="response.status" ng-if="response.status"></span></small></h3><span ng-bind="sending" ng-if="makingRequest"></span><code ng-if="!makingRequest" ng-bind-html="response.body"></code></pre>
+
+            <pre id="response"><h3 class="flush-top">Example Response</h3><code></code></pre>
             <script type="text/javascript">jQuery('#response code').html(library.json.prettyPrint(JSON.parse(<?=json_encode($api->response) ?>)))</script>
 
         </div>
+        <div class="col-md-8 the-request">
+            <button class="btn btn-primary btn-request" ng-click="doRequest()">&#8678; Try A Request</button>
+            <br/>
+            <br/>
+            @if($api->inputProps)
+                <div >
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                            <tr>
+                                <th>Field Name</th>
+                                <th></th>
+                                <th>Validators</th>
+                                <th>Description</th>
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            @foreach ($api->inputProps as $name => $rules)
+                                <?php
+                                if (count($rules) > 1)
+                                {
+                                    list($validators, $description) = $rules;
+                                }
+                                else
+                                {
+                                    $validators = reset($rules);
+                                    $description = '';
+                                }
+                                ?>
+                                <tr>
+                                    <td>{{$name}}</td>
+                                    <td><input ng-model="request.params.{{$name}}" type="text" name="{{$name}}"/></td>
+                                    <td>{{$validators}}</td>
+                                    <td>{{$description}}</td>
+                                    <td></td>
+                                </tr>
+                            @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endif
+        </div>
+
     </div>
 @stop
 
