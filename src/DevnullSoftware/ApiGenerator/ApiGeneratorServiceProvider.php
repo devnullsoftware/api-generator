@@ -27,13 +27,10 @@ class ApiGeneratorServiceProvider extends ServiceProvider {
 
 		if (env('EXPOSE_APIS', true))
 		{
-			Route::get('/apis', 'DevnullSoftware\ApiGenerator\DocsController@apis');
-			Route::get('/apis/route-models', 'DevnullSoftware\ApiGenerator\DocsController@routeModels');
+			Route::get('/apis', 'DevnullSoftware\ApiGenerator\DocsController@apis2Welcome');
+			Route::get('/apis/{api}', 'DevnullSoftware\ApiGenerator\DocsController@apis2');
 
-			Route::get('/apis/v2', 'DevnullSoftware\ApiGenerator\DocsController@apis2Welcome');
-			Route::get('/apis/v2/{api}', 'DevnullSoftware\ApiGenerator\DocsController@apis2');
-
-			Route::get('apis/v2/data', 'DevnullSoftware\ApiGenerator\DocsController@apis2Data');
+			Route::get('apis/data', 'DevnullSoftware\ApiGenerator\DocsController@apis');
 		}
 	}
 

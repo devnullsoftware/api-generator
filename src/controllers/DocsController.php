@@ -49,17 +49,6 @@ class DocsController extends BaseController {
      */
     public function apis()
     {
-        // This allows us to use braces for angularjs
-        Blade::setContentTags('<%', '%>'); 		// for variables and all things Blade
-        Blade::setEscapedContentTags('<%%', '%%>'); 	// for escaped data
-
-        if ( ! Request::ajax())
-        {
-            return Request::get('plain', false)
-                ? View::make('ApiGenerator::plaindocs')
-                : View::make('ApiGenerator::apidocs');
-        }
-
         $apis = [];
         foreach (Route::getRoutes() as $route)
         {
