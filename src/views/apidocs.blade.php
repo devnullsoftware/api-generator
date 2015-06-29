@@ -37,8 +37,10 @@
                         </thead>
                         <tbody>
                         @foreach($api->responseCodes as $code => $message)
-                            <td>{{ $code }}</td>
-                            <td>{{ $message }}</td>
+                            <tr>
+                                <td>{{ $code }}</td>
+                                <td>{{ $message }}</td>
+                            </tr>
                         @endforeach
                         </tbody>
                     </table>

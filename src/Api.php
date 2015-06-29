@@ -56,24 +56,23 @@ class Api {
 
         $this->urlIdMap = $this->getUrlIdMap($controller);
 
-        $this->responseCodes = $this->getResponseCodes($requestclass, !!$this->inputProps);
+        $this->responseCodes = $this->getResponseCodes($controller, $method, !!$this->inputProps);
     }
 
-    public function getResponseCodes($requestClass, $hasProperties) {
+    public function getResponseCodes($controller, $method, $hasProperties) {
         $codes = [];
         if ($hasProperties) {
             $codes = [422 => 'Missing fields or validation problems.'];
         }
 
-        if ($requestClass) {
-            foreach ($requestClass->responseCodes() as $code => $message) {
-                $code = (int) $code;
+        $docblock = (new \ReflectionMethod($controller, $method))->getDocComment();
 
-                $codes[$code] = $message;
-            }
-        }
+        preg_match_all('!@ApiErrorCode(\d\d\d) (.*)!i', $docblock, $matches);
 
-        return $codes;
+        if (empty($matches[1])) return $codes;
+
+
+        return $codes += array_combine($matches[1], $matches[2]);
     }
 
     private function getUrlIdMap($controller) {
