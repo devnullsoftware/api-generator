@@ -48,8 +48,8 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
             var realPath = '/'+r.path;
 
             // move user params into route
-            angular.forEach(r.routeParams, function(param) {
-                realPath.replace('{'+param+'}', param);
+            angular.forEach(r.routeParams, function(value, param) {
+                realPath = realPath.replace('{'+param+'}', value);
             });
 
             // Make all route params required
