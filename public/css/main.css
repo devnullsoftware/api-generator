@@ -1,9 +1,15 @@
 .ng-cloak {
     display: none;
 }
-.nav > li > a {
+.nav > li > a2 {
     padding-top: 0px;
     padding-bottom: 0px;
+}
+
+.nav > li .group {
+    margin-bottom: 0px;
+    padding-bottom: 0px;
+    margin-left: 10px;
 }
 
 .btn-request {

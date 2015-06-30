@@ -3,7 +3,7 @@
 @section('content')
     <script type="text/javascript" src="/packages/devnullsoftware/api-generator/js/json-pretty.js"></script>
 
-    <div class="col-sm-6 col-sm-offset-3 col-md-11 col-md-offset-1 main" ng-controller="requestController">
+    <div class="col-sm-6 col-sm-offset-3 col-md-9 col-md-offset-2 main" ng-controller="requestController">
         <div>
             <h1 class="page-header"><strong>{{$api->group}}\</strong> {{$api->title}} <span class="handler">{{$api->handler}}</span></h1>
 

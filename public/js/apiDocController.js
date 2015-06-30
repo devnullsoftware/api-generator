@@ -101,6 +101,13 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
         $scope.apiGroups = [];
         $scope.apiRouteModels = [];
 
+        $scope.currentHandler = (function() {
+            var parts = window.location.pathname.split('/');
+
+            return parts[parts.length-1];
+        })();
+
+        console.log($scope.currentHandler);
         /**
          * Used by UI to display a json object of the data to submit
          * @param api

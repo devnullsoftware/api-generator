@@ -46,13 +46,13 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div ng-controller="apiDocController" class="col-sm-2 col-md-1 sidebar">
+        <div ng-controller="apiDocController" class="col-sm-2 col-md-2 sidebar">
             <form class="form-group-sm">
                 <input type="text" class="form-control" placeholder="Search..." ng-model="search">
             </form>
             <ul class="nav nav-sidebar api-nav" ng-repeat="apiGroup in apiGroups | orderBy:'name'">
-                <li role="presentation" ng-if="filtered.length"><span><h4 ng-bind="apiGroup.name"></h4></span></li>
-                <li ng-if="filtered.length" ng-repeat="api in filtered = (apis | apiGroupFilter:apiGroup | orderBy:'sort' | filter:search)"><a href="/apis/%%api.handler%%"><small ng-bind="api.title || api.handler"></small></a></li>
+                <li role="presentation" ng-if="filtered.length"><span><h4 class="group" ng-bind="apiGroup.name"></h4></span></li>
+                <li ng-if="filtered.length" ng-class="api.handler == currentHandler ? 'active' : ''" ng-repeat="api in filtered = (apis | apiGroupFilter:apiGroup | orderBy:'sort' | filter:search)"><a ng-href="/apis/%%api.handler%%"><span ng-bind="api.title || api.handler"></span></a></li>
             </ul>
         </div>
 
