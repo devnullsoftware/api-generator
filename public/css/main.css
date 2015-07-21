@@ -1,15 +1,9 @@
 .ng-cloak {
     display: none;
 }
-.nav > li > a2 {
+.nav > li > a {
     padding-top: 0px;
     padding-bottom: 0px;
-}
-
-.nav > li .group {
-    margin-bottom: 0px;
-    padding-bottom: 0px;
-    margin-left: 10px;
 }
 
 .btn-request {
@@ -122,4 +116,8 @@ pre {
 }
 .json-string {
     color: olive;
+}
+
+.array-input {
+    margin-bottom: 2px;
 }

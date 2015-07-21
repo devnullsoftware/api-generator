@@ -91,7 +91,18 @@
                                 ?>
                                 <tr>
                                     <td>{{$name}}</td>
-                                    <td><input ng-model="request.params.{{$name}}" type="text" name="{{$name}}"/></td>
+                                    <td>
+                                        @if(substr_count($validators, 'array'))
+                                            @foreach([0, 1,2,3,4] as $num)
+                                                <input class="array-input" ng-model="request.params.{{$name}}[{{$num}}]" type="text" name="{{$name}}[{{$num}}]" ng-if="{{$num}} == 0 || request.params.{{$name}}[{{$num-1}}]"/>
+                                            @endforeach
+                                        @elseif(substr_count($validators, 'password'))
+                                            <input ng-model="request.params.{{$name}}" type="password" name="{{$name}}"/>
+                                        @else
+                                            <input ng-model="request.params.{{$name}}" type="text" name="{{$name}}"/>
+                                        @endif
+
+                                    </td>
                                     <td>{{$validators}}</td>
                                     <td>{{$description}}</td>
                                     <td></td>

@@ -80,6 +80,18 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
                 dotdotdot(count + 1);
             };
 
+            // fix up the array types to not have blanks and not be keyed
+            angular.forEach($scope.request.params, function(value, key) {
+                if (typeof value == 'number' || typeof value == 'string') return;
+
+                $scope.request.params[key] = [];
+
+                angular.forEach(value, function(innerVal) {
+                    if (!innerVal.length) return; // skip empty
+
+                    $scope.request.params[key].push(innerVal);
+                });
+            });
             $http[$scope.request.method](realPath, $scope.request.params)
                 .success(function (res, code) {
                     $scope.response.body = library.json.prettyPrint(res);
@@ -282,7 +294,7 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
 
                     // link the restrictions
                     if (restrictions.length) {
-                            element.restrictions = restrictions.split('|'),
+                        element.restrictions = restrictions.split('|'),
 
                             angular.forEach(element.restrictions, function (restriction, key) {
                                 var normalized = restriction.split(':')[0];
