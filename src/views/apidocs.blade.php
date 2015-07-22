@@ -52,14 +52,15 @@
         <div class="col-md-4">
 
 
-            <pre id="response"><h3 class="flush-top">Request Response <small><span ng-bind="response.status" ng-if="response.status"></span></small></h3><span ng-bind="sending" ng-if="makingRequest"></span><code ng-if="!makingRequest" ng-bind-html="response.body"></code></pre>
+            <pre id="response"><h3 class="flush-top">Request Response <small><span class="spinner" ng-show="inRequest"></span><span ng-bind="response.status" ng-if="response.status && !inRequest"></span></small></h3><span ng-bind="sending" ng-if="makingRequest"></span><code ng-if="!makingRequest" ng-bind-html="response.body"></code></pre>
 
             <pre id="response"><h3 class="flush-top">Example Response</h3><code></code></pre>
             <script type="text/javascript">jQuery('#response code').html(library.json.prettyPrint(JSON.parse(<?=json_encode($api->response) ?>)))</script>
 
         </div>
-        <div class="col-md-8 the-request">
-            <button class="btn btn-primary btn-request" ng-click="doRequest()">&#8678; Try A Request</button>
+        <form ng-submit="doRequest()">
+            <div class="col-md-8 the-request">
+            <button class="btn btn-primary btn-request">&#8678; Try A Request</button>
             <br/>
             <br/>
             @if($api->inputProps)
@@ -120,6 +121,7 @@
                 </div>
             @endif
         </div>
+        </form>
 
     </div>
 @stop
