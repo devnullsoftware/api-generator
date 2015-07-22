@@ -1,3 +1,48 @@
+var spins = [
+    "←↖↑↗→↘↓↙",
+    "▁▃▄▅▆▇█▇▆▅▄▃",
+    "▉▊▋▌▍▎▏▎▍▌▋▊▉",
+    "▖▘▝▗",
+    "┤┘┴└├┌┬┐",
+    "◢◣◤◥",
+    "◰◳◲◱",
+    "◴◷◶◵",
+    "◐◓◑◒",
+    "|/-\\",
+    [
+        '*...........',
+        '.*..........',
+        '..*.........',
+        '...*........',
+        '....*.......',
+        '.....*......',
+        '......*.....',
+        '.......*....',
+        '........*...',
+        '.........*..',
+        '..........*.',
+        '...........*',
+        '..........*.',
+        '.........*..',
+        '........*...',
+        '.......*....',
+        '......*.....',
+        '.....*......',
+        '....*.......',
+        '...*........',
+        '..*.........',
+        '.*..........',
+    ]
+];
+
+var spin = spins[9];
+var i=0;
+
+setInterval(function() {
+    i = i==spin.length-1 ? 0 : ++i;
+    jQuery('.spinner').text(spin[i]);
+},200);
+
 angular.module('myApp', ['ngStorage', 'ngSanitize'])
     .config(function ($httpProvider) {
         $httpProvider.defaults.headers.common["X-Requested-With"] = 'XMLHttpRequest';
@@ -79,7 +124,6 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
 
                 dotdotdot(count + 1);
             };
-
             // fix up the array types to not have blanks and not be keyed
             angular.forEach($scope.request.params, function(value, key) {
                 if (typeof value == 'number' || typeof value == 'string') return;
@@ -92,18 +136,33 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
                     $scope.request.params[key].push(innerVal);
                 });
             });
+
+            $scope.inRequest = true;
+            // make the request
             $http[$scope.request.method](realPath, $scope.request.params)
                 .success(function (res, code) {
-                    $scope.response.body = library.json.prettyPrint(res);
+                    if (typeof res == 'string' && res.indexOf('<html') > -1) {
+                        $scope.response.body = res;
+                    } else {
+                        $scope.response.body = library.json.prettyPrint(res);
+                    }
                     $scope.response.status = code;
 
                     $scope.makingRequest = false;
                 })
                 .error(function(res, code) {
-                    $scope.response.body = library.json.prettyPrint(res);
+                    if (typeof res == 'string' && res.indexOf('<html') > -1) {
+                        $scope.response.body = res;
+                    } else {
+                        $scope.response.body = library.json.prettyPrint(res);
+                    }
+
                     $scope.response.status = code;
 
                     $scope.makingRequest = false;
+                })
+                .finally(function() {
+                    $scope.inRequest = false;
                 });
         }
 
@@ -294,7 +353,7 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
 
                     // link the restrictions
                     if (restrictions.length) {
-                        element.restrictions = restrictions.split('|'),
+                            element.restrictions = restrictions.split('|'),
 
                             angular.forEach(element.restrictions, function (restriction, key) {
                                 var normalized = restriction.split(':')[0];
