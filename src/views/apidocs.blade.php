@@ -91,15 +91,21 @@
                                 ?>
                                 <tr>
                                     <td>{{$name}}</td>
-                                    <td>
+                                    <td style="width: 250px;">
                                         @if(substr_count($validators, 'array'))
                                             @foreach([0, 1,2,3,4] as $num)
-                                                <input class="array-input" ng-model="request.params.{{$name}}[{{$num}}]" type="text" name="{{$name}}[{{$num}}]" ng-if="{{$num}} == 0 || request.params.{{$name}}[{{$num-1}}]"/>
+                                                <input class="array-input form-control" ng-model="request.params.{{$name}}[{{$num}}]" type="text" name="{{$name}}[{{$num}}]" ng-if="{{$num}} == 0 || request.params.{{$name}}[{{$num-1}}]"/>
                                             @endforeach
                                         @elseif(substr_count($validators, 'password'))
-                                            <input ng-model="request.params.{{$name}}" type="password" name="{{$name}}"/>
+                                            <input ng-model="request.params.{{$name}}" type="password" name="{{$name}}" class="form-control"/>
+                                        @elseif(substr_count($validators, 'boolean'))
+                                            <select ng-model="request.params.{{$name}}" name="{{$name}}" class="form-control">
+                                                <option></option>
+                                                <option value="1">Yes</option>
+                                                <option value="0">No</option>
+                                            </select>
                                         @else
-                                            <input ng-model="request.params.{{$name}}" type="text" name="{{$name}}"/>
+                                            <input ng-model="request.params.{{$name}}" type="text" name="{{$name}}" class="form-control"/>
                                         @endif
 
                                     </td>
