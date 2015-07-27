@@ -52,6 +52,9 @@ class DocsController extends BaseController {
         $apis = [];
         foreach (Route::getRoutes() as $route)
         {
+            $routeDomain = !empty($route->getAction()['domain']) ? $route->getAction()['domain'] : false;
+            if ($routeDomain && $routeDomain != \Request::server('HTTP_HOST')) continue;
+
             // remove non apis and duplicate of PUT (ie PATCH)
             if ( stripos($route->uri(), 'api/') === 0 && ! in_array('PATCH', $route->getMethods()) && array_key_exists('controller', $route->getAction()) )
             {
