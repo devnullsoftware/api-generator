@@ -79,16 +79,19 @@
                             <tbody>
 
                             @foreach ($api->inputProps as $name => $rules)
-                                <?php
-                                if (count($rules) > 1)
-                                {
-                                    list($validators, $description) = $rules;
-                                }
-                                else
-                                {
-                                    $validators = reset($rules);
-                                    $description = '';
-                                }
+                                    <?php
+                                    if (count($rules) > 1)
+                                    {
+                                        list($validators, $description) = $rules;
+                                    }
+                                    else
+                                    {
+                                        $validators = reset($rules);
+                                        $description = '';
+                                    }
+
+                                    $validators = preg_replace('#([\w]+?):([^|]*)#', '<span style="cursor:pointer; text-decoration:underline" title="$2">$1</span>*', $validators);
+
                                 ?>
                                 <tr>
                                     <td>{{$name}}</td>
@@ -97,7 +100,7 @@
                                             @foreach([0, 1,2,3,4] as $num)
                                                 <input class="array-input form-control" ng-model="request.params.{{$name}}[{{$num}}]" type="text" name="{{$name}}[{{$num}}]" ng-if="{{$num}} == 0 || request.params.{{$name}}[{{$num-1}}]"/>
                                             @endforeach
-                                        @elseif(substr_count($validators, 'password'))
+                                        @elseif(substr_count($name, 'password'))
                                             <input ng-model="request.params.{{$name}}" type="password" name="{{$name}}" class="form-control"/>
                                         @elseif(substr_count($validators, 'boolean'))
                                             <select ng-model="request.params.{{$name}}" name="{{$name}}" class="form-control">
@@ -110,7 +113,7 @@
                                         @endif
 
                                     </td>
-                                    <td>{{$validators}}</td>
+                                    <td>{!! $validators !!}</td>
                                     <td>{{$description}}</td>
                                     <td></td>
                                 </tr>
