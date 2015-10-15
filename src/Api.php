@@ -159,11 +159,17 @@ class Api {
 
         foreach($reflectionMethod->getParameters() as $param)
         {
-            $rclass = $param->getClass();
-            if ( ! empty($rclass->name) && stripos($rclass->name, 'request'))
-            {
-                return new $rclass->name($path, $httpMethod);
+            // make sure we found a class
+            if (!($rclass = $param->getClass()) || empty($rclass->name)) {
+                continue;
             }
+
+            // make sure it is something we can use
+            if (!is_subclass_of($rclass->name, ApiRequest::class)) {
+                continue;
+            }
+
+            return new $rclass->name($path, $httpMethod);
         }
 
         return false;
