@@ -38,7 +38,16 @@ class DocsController extends BaseController {
         $api = false;
         foreach (Route::getRoutes() as $route)
         {
-            if (empty($route->getAction()['controller']) || !substr_count($route->getAction()['controller'], $action)) continue;
+            if (empty($route->getAction()['controller'])) {
+                // Not the droid you are looking for
+                continue;
+            }
+
+            $controller = $route->getAction()['controller'];
+            if (strrpos($controller, $action) != strlen($controller)-strlen($action)) {
+                // Not here either since doesn't end with action
+                continue;
+            }
 
             $api = new Api($route);
         }
