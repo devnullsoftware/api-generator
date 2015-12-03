@@ -7,7 +7,7 @@
         <div>
             <h1 class="page-header"><strong>{{$api->group}}\</strong> {{$api->title}} <span class="handler">{{$api->handler}}</span></h1>
 
-            <p>{{$api->description}}</p>
+            <p>{!! $api->description !!}</p>
 
             <h3>Path</h3>
             <input type="hidden" ng-init="request.method='{{ $api->httpMethod }}'" />

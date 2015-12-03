@@ -113,9 +113,9 @@ class Api {
         $docblock = (new \ReflectionMethod($controller, $method))->getDocComment();
 
         // TODO: Make this smarter about more lines
-        preg_match('!@ApiDescription (.*)!i', $docblock, $match);
+        preg_match('!@ApiDescription (.+?)[@]!is', $docblock, $match);
 
-        return trim(end($match)) ?: '';
+        return str_replace('*', '', trim(end($match))) ?: '';
     }
 
     private function getApiTitle($controller, $method)
