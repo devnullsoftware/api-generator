@@ -52,6 +52,8 @@ class Api {
         $requestclass = $this->getRequestClass($controller, $method, $this->path, $this->httpMethod);
         $this->inputProps = $requestclass ? $requestclass->apiFields() : [];
 
+        $this->requestIsArray = !empty($requestclass->isArray);
+
         $this->response = $requestclass ? $requestclass->exampleResponse() : '';
 
         $this->urlIdMap = $this->getUrlIdMap($controller);
@@ -108,6 +110,16 @@ class Api {
         return trim(end($match)) ?: '';
     }
 
+    private function getApiRequestOverride($controller, $method)
+    {
+        $docblock = (new \ReflectionMethod($controller, $method))->getDocComment();
+
+        // TODO: Make this smarter about more lines
+        preg_match('!@ApiRequest (.*)!i', $docblock, $match);
+
+        return str_replace('*', '', trim(end($match))) ?: '';
+    }
+
     private function getApiDescription($controller, $method)
     {
         $docblock = (new \ReflectionMethod($controller, $method))->getDocComment();
@@ -154,8 +166,14 @@ class Api {
      */
     private function getRequestClass($controller, $method, $path, $httpMethod)
     {
+        $override = $this->getApiRequestOverride($controller, $method);
+
         // get the validator if exists
         $reflectionMethod = new \ReflectionMethod($controller, $method);
+
+        if ($override) {
+            return new $override($path, $httpMethod);
+        }
 
         foreach($reflectionMethod->getParameters() as $param)
         {

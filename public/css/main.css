@@ -13,6 +13,14 @@
     margin-top: 0px;
 }
 
+.form-field .required {
+    border: 1px solid lightpink;
+}
+
+.form-field .required.ng-untouched {
+    border: 1px solid lightcoral;
+}
+
 h3 {
     margin-top: 28px;
 }
@@ -120,4 +128,14 @@ pre {
 
 .array-input {
     margin-bottom: 2px;
+}
+
+.request-type-group {
+    float: right;
+    clear: both;
+}
+
+.user-input.json textarea {
+    width: 100%;
+    height: 400px;
 }

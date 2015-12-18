@@ -58,6 +58,7 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
             });
         }
     })
+
     .controller('requestController', function($scope, $http, $rootScope, $sessionStorage) {
         // Model for storing necessary data to make the request
         $scope.request = {
@@ -67,23 +68,18 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
             params: {}
         }
 
-        $scope.$watch(function(scope) {return scope.handler; }, function() {
-            if (!$scope.handler || $scope.request.params.length) return;
-
-            $scope.request.routeParams = $sessionStorage[$scope.handler].routeParams;
-            $scope.request.params = $sessionStorage[$scope.handler].params;
-        });
-
         $scope.response = {
             status: false,
             body: ''
         }
 
-        $scope.doRequest = function() {
-            // store the request so future page loads has data
-            $sessionStorage[$scope.handler] = $scope.request;
+        $scope.inputType;
+        $scope.jsonInputData = JSON.stringify(window.jsonInputData, null, 4) || '';
+        $scope.isArray;
 
+        $scope.doRequest = function() {
             var realPath = (function(r) {
+
                 var realPath = '/'+r.path;
 
                 // move user params into route
@@ -106,7 +102,6 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
                 return realPath;
             })($scope.request);
 
-
             $scope.makingRequest = true;
             var dotdotdot = function(count) {
                 if (!$scope.makingRequest) {
@@ -124,22 +119,55 @@ angular.module('myApp', ['ngStorage', 'ngSanitize'])
 
                 dotdotdot(count + 1);
             };
-            // fix up the array types to not have blanks and not be keyed
-            angular.forEach($scope.request.params, function(value, key) {
-                if (typeof value == 'number' || typeof value == 'string') return;
 
-                $scope.request.params[key] = [];
+            // // fix up the array types to not have blanks and not be keyed
+            // angular.forEach($scope.request.params, function(value, key) {
+            //     if (typeof value == 'number' || typeof value == 'string' || typeof value == 'object') return;
 
-                angular.forEach(value, function(innerVal) {
-                    if (!innerVal.length) return; // skip empty
+            //     $scope.request.params[key] = [];
 
-                    $scope.request.params[key].push(innerVal);
-                });
+            //     angular.forEach(value, function(innerVal) {
+            //         if (!innerVal.length) return; // skip empty
+
+            //         $scope.request.params[key].push(innerVal);
+            //     });
+            // });
+
+            // create a json representation of params
+            var params = {};
+            angular.forEach($scope.request.params, (value, key: string) => {
+                if (key.indexOf('.') == -1) {
+                    params[key] = value;
+                    return;
+                }
+
+                var chain = key.split('.').reverse();
+
+                var first = chain.pop();
+
+                var obj = {};
+                for(let i = 0; i < chain.length; i++) {
+                    if (i == 0) {
+                        obj[chain[i]] = value;
+                    } else {
+                        let old = JSON.parse(JSON.stringify(obj));
+                        obj = {};
+                        obj[chain[i]] = old;
+                    }
+                }
+                
+                params[first] = obj;
             });
+
+            if ($scope.inputType == 'json') {
+                params = JSON.parse($scope.jsonInputData);
+            } else if ($scope.isArray) {
+                console.log('here');
+            }
 
             $scope.inRequest = true;
             // make the request
-            $http[$scope.request.method](realPath, $scope.request.params)
+            $http[$scope.request.method](realPath, params)
                 .success(function (res, code) {
                     if (typeof res == 'string' && res.indexOf('<html') > -1) {
                         $scope.response.body = res;

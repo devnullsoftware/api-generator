@@ -52,8 +52,69 @@ class DocsController extends BaseController {
             $api = new Api($route);
         }
 
-        return view('ApiGenerator::apidocs', ['api' => $api]);
+        // make a json entity
+        $json = [];
+        foreach ($api->inputProps as $name => $rules) {
+            if ($api->requestIsArray) {
+                $name = '*.'.$name;
+            }
+
+            if (!substr_count($name, '.')) {
+                continue;
+            }
+
+            $this->assignArrayByPath($json, $name, '');
+
+            continue;
+            $parts = explode('.', $name);
+
+            while ($part = array_pop($parts)) {
+                if (!count($parts)) {
+                    $json[$part] = '';
+                    continue;
+                }
+
+
+            }
+//            $prop = array_pop($parts); // pop of the actual properties
+
+
+            $pastFirst = 0;
+            while ($part = array_pop($parts)) {
+//                if (!$pastFirst++) {
+//                    $stack = [$part => ''];
+//                } elseif($part == '*') {
+//                    if (empty($stack))
+//                } else {
+//                    $stack = [$part => $stack];
+//                }
+//                if ($part == '*') {
+//                    $stack = [$stack];
+//                } else {
+//                }
+            }
+
+            $json = array_merge($json, $stack);
+        }
+
+        return view('ApiGenerator::apidocs', ['api' => $api, 'json' => $json]);
     }
+
+    public function assignArrayByPath(&$arr, $path, $value)
+    {
+        $keys = explode('.', $path);
+
+        while ($key = array_shift($keys)) {
+            if ($key == '*') {
+                $arr = &$arr[0];
+            } else {
+                $arr = &$arr[$key];
+            }
+        }
+
+        $arr = $value;
+    }
+
     /**
      */
     public function apis()
